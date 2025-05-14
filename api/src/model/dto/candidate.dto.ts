@@ -1,4 +1,4 @@
-export interface Candidate {
+export interface CandidateDto {
   name: string;
   surname: string;
   seniority: 'junior' | 'senior';
