@@ -14,8 +14,6 @@ export class CandidatesExcelImporterService {
       return Promise.reject(new Error('could not get file data'));
     }
 
-    console.log('getting file data', file)
-
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -45,8 +43,6 @@ export class CandidatesExcelImporterService {
   }
 
   private validationErrors(result: any): string[] {
-
-    console.log(result);
     let errors: string[] = [];
 
     if (result.seniority !== 'junior' && result.seniority !== 'senior') {
