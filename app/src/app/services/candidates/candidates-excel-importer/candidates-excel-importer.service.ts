@@ -32,6 +32,8 @@ export class CandidatesExcelImporterService {
             reject(new Error(`Invalid columns in excel file: ${validationErrors.join(', ')}`))
           }
 
+          const resultCandidate = result as CandidateExcelData;
+          resultCandidate.availability = this.parseBool((result as any).availability);
           resolve(result as CandidateExcelData);
         } catch {
           reject(new Error('there was an error while getting the file data'));
@@ -58,5 +60,9 @@ export class CandidatesExcelImporterService {
     }
 
     return errors;
+  }
+
+  private parseBool(boolString: string) {
+    return boolString === 'true';
   }
 }
