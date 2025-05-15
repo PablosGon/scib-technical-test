@@ -9,4 +9,4 @@ cd app
 npm install
 ng s
 ## Environment file
-The .env file was pushed just for the review. This would not happen in a real scenario.
+The .env file was pushed just for the review. This would not happen in a real scenario. This file also includes the connection settings for the database, if needed.
