@@ -11,7 +11,7 @@ export class CandidatesExcelImporterService {
 
   public getCandidateDataFromExcel(file?: File): Promise<CandidateExcelData> {
     if(!file) {
-      return Promise.reject('could not get file data');
+      return Promise.reject(new Error('could not get file data'));
     }
 
     console.log('getting file data', file)
@@ -30,8 +30,8 @@ export class CandidatesExcelImporterService {
           const result = utils.sheet_to_json(sheet)[0] as CandidateExcelData;
 
           resolve(result);
-        } catch (error) {
-          reject(error);
+        } catch {
+          reject(new Error('there was an error while getting the file data'));
         }
       }
 

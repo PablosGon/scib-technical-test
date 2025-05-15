@@ -4,11 +4,16 @@ import { CandidatesService } from '../../../services/candidates/candidates.servi
 import { CandidateForm } from '../../../models/candidates/candidate-form.model';
 import { CandidatesExcelImporterService } from '../../../services/candidates/candidates-excel-importer/candidates-excel-importer.service';
 import { Candidate } from '../../../models/candidates/candidate.model';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-candidates-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './candidates-form.component.html',
   styleUrl: './candidates-form.component.css'
 })
@@ -25,7 +30,7 @@ export class CandidatesFormComponent {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, Validators.maxLength(500)]],
       surname: ['', [Validators.required, Validators.maxLength(500)]],
-      data: [''],
+      data: ['', [Validators.required]],
     });
     this.form.valueChanges.subscribe(() => {
       

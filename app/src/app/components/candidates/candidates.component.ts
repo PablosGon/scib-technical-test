@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { CandidatesFormComponent } from "./candidates-form/candidates-form.component";
 
 @Component({
   selector: 'app-candidates',
   standalone: true,
-  imports: [],
+  imports: [CandidatesFormComponent],
   templateUrl: './candidates.component.html',
   styleUrl: './candidates.component.css'
 })
