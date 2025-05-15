@@ -36,7 +36,6 @@
 /api/!.vscode/extensions.json
 
 # dotenv environment variable files
-/api/.env
 /api/.env.development.local
 /api/.env.test.local
 /api/.env.production.local
