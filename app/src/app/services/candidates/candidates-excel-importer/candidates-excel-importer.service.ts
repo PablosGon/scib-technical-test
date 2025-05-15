@@ -27,17 +27,40 @@ export class CandidatesExcelImporterService {
           const sheetName = book.SheetNames[0];
           const sheet = book.Sheets[sheetName];
 
-          const result = utils.sheet_to_json(sheet)[0] as CandidateExcelData;
+          const result = utils.sheet_to_json(sheet)[0];
 
-          resolve(result);
+          const validationErrors = this.validationErrors(result);
+          if (validationErrors.length > 0) {
+            reject(new Error(`Invalid columns in excel file: ${validationErrors.join(', ')}`))
+          }
+
+          resolve(result as CandidateExcelData);
         } catch {
           reject(new Error('there was an error while getting the file data'));
         }
       }
 
       reader.readAsArrayBuffer(file);
-
     })
+  }
 
+  private validationErrors(result: any): string[] {
+
+    console.log(result);
+    let errors: string[] = [];
+
+    if (result.seniority !== 'junior' && result.seniority !== 'senior') {
+      errors.push('seniority must be junior or senior');
+    }
+
+    if (typeof result.yearsOfExperience !== 'number' || result.yearsOfExperience < 0) {
+      errors.push('years of experience must be a non-negative number');
+    }
+
+    if (result.availability !== 'true' && result.availability !== 'false') {
+      errors.push('availability must be true or false');
+    }
+
+    return errors;
   }
 }

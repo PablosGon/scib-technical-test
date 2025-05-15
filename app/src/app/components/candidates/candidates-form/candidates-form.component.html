@@ -1,23 +1,28 @@
 <mat-card class="candidates-form__card">
-  <mat-card-title>
-    Candidates Form
-  </mat-card-title>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="candidates-form__form">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput type="text" formControlName="name" (change)="onChange()"/>
-      <mat-error>{{form.get('name')?.value ? 'Name must not exceed 500 characters' : 'Name is required'}}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Surname</mat-label>
-      <input matInput type="text" formControlName="surname" (change)="onChange()"/>
-      <mat-error>{{form.get('surname')?.value ? 'Surname must not exceed 500 characters' : 'Surname is required'}}</mat-error>
-    </mat-form-field>
-    <label>
-      Data: <br/>
-      <input type="file" (change)="onFileSelected($event)"/>
-      <span></span>
-    </label>
-    <button mat-button [disabled]="!form.valid">Submit</button>
-  </form>
+  @if (done) {
+    <p>Done!</p>
+  }
+  @else {
+    <mat-card-title>
+      Candidates Form
+    </mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="candidates-form__form">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+        <mat-error>{{form.get('name')?.value ? 'Name must not exceed 500 characters' : 'Name is required'}}</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Surname</mat-label>
+        <input matInput type="text" formControlName="surname" />
+        <mat-error>{{form.get('surname')?.value ? 'Surname must not exceed 500 characters' : 'Surname is required'}}</mat-error>
+      </mat-form-field>
+      <label>
+        Data: <br/>
+        <input type="file" (change)="onFileSelected($event)"/>
+      </label>
+      <button mat-button [disabled]="!form.valid">Submit</button>
+    </form>
+    <span style="color: red;">{{errorMessage}}</span>
+  }
 </mat-card>

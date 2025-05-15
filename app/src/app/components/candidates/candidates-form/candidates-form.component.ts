@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,10 +22,15 @@ export class CandidatesFormComponent {
 
   form!: FormGroup;
 
+  public errorMessage?: string;
+  public done: boolean = false;
+
   constructor(
     private readonly candidatesService: CandidatesService,
     private readonly candidatesExcelImporterService: CandidatesExcelImporterService,
-    private readonly formBuilder: FormBuilder) {}
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -39,44 +45,43 @@ export class CandidatesFormComponent {
 
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement)?.files?.[0];
-    console.log(file);
     if (file) {
       this.form.patchValue({ data: file });
       this.form.get('data')?.updateValueAndValidity();
     }
   }
 
-  onChange(){
-    console.log(this.form.value);
-  }
-
   async onSubmit() {
-
-    console.log("boton submit pulsado")
     if (this.form.invalid) {
       return;
     }
 
-    console.log(this.form.value)
     const fromValues = this.form.value as CandidateForm;
-
     let newCandidate!: Candidate;
-    await this.candidatesExcelImporterService.getCandidateDataFromExcel(fromValues.data).then((data) => {
+
+    try {
+      this.errorMessage = '';
+      const excelData = await this.candidatesExcelImporterService.getCandidateDataFromExcel(fromValues.data);
+
       newCandidate = {
         name: fromValues?.name ?? '',
         surname: fromValues?.surname ?? '',
-        seniority: data.seniority,
-        yearsOfExperience: data.yearsOfExperience,
-        availability: data.availability,
+        seniority: excelData.seniority,
+        yearsOfExperience: excelData.yearsOfExperience,
+        availability: excelData.availability,
       }
 
-    });
-
-    console.log('XD')
-
-    this.candidatesService.postCandidate(newCandidate).subscribe((data) => {
-      console.log("Habemus candidate")
-    })
+      this.candidatesService.postCandidate(newCandidate).subscribe({
+        next: () => {
+          this.done = true;
+        },
+        error: (error: Error) => {
+          this.errorMessage = error.message ?? 'Something went wrong...'
+        },
+      });
+    } catch(error: any) {
+      this.errorMessage = error.message;
+    }
   }
 
 }
