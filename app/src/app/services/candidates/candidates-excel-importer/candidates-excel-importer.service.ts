@@ -33,7 +33,11 @@ export class CandidatesExcelImporterService {
           }
 
           const resultCandidate = result as CandidateExcelData;
-          resultCandidate.availability = this.parseBool((result as any).availability);
+
+          if (typeof resultCandidate.availability === 'string'){
+            resultCandidate.availability = this.parseBool((result as any).availability);
+          }
+          console.log(resultCandidate);
           resolve(result as CandidateExcelData);
         } catch {
           reject(new Error('there was an error while getting the file data'));
@@ -55,7 +59,7 @@ export class CandidatesExcelImporterService {
       errors.push('years of experience must be a non-negative number');
     }
 
-    if (result.availability !== 'true' && result.availability !== 'false') {
+    if (typeof result.availability === 'string' && (result.availability as string).toLowerCase() !== 'true' && (result.availability as string).toLowerCase() !== 'false') {
       errors.push('availability must be true or false');
     }
 
